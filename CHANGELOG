@@ -29,3 +29,65 @@ This version improves usability and fixes critical issues, enhancing the overall
 
 ----------------------------
 End of Changelog
+
+
+🔄 NREM v1.2 Changelog
+Release Date: May 2025
+Project Name: NREM (Network Reconnaissance & Enumeration Module)
+Developer: Linux Services
+
+✅ What's New
+🔧 Added Features:
+[Option 10] HTTP Headers Check
+
+Uses curl -I to fetch and display response headers for any given URL.
+
+Output saved to headers.txt.
+
+[Option 11] Reverse DNS Lookup
+
+Uses nslookup to resolve an IP address to its hostname.
+
+Output saved to reverse_dns.txt.
+
+🖼️ UI/Visual Enhancements
+New color-coded ASCII banner using ANSI escape codes for clearer terminal appearance.
+
+Menu spacing and numbering now more readable and uniform.
+
+Added real-time clock display.
+
+Cleaner section headers (call :header) for better navigation and reuse.
+
+📁 Structural & Quality Improvements
+Output files like active_ips.txt, wifi_passwords.txt, geolocate_result.txt, etc., are now cleaned/created at startup for reliability.
+
+Introduced a logs/ directory (currently unused, but intended for future logging support).
+
+Ensured all temporary files (e.g., temp_profiles.txt) are deleted after use.
+
+Code modularization via call :header for header reuse.
+
+Improved error handling for whois and external tools.
+
+Enhanced consistency in naming output files for clarity.
+
+🐞 Known/Possible Bugs or Limitations
+WHOIS command may fail if the whois utility is not installed or available in the system PATH.
+
+Curl dependency: Both geolocation and HTTP header checks require curl, which may not be pre-installed on all Windows systems.
+
+PowerShell Port Scan may be slow depending on the network and machine performance.
+
+Reverse DNS lookups are dependent on DNS configurations and may not return results for all IPs.
+
+Limited Wi-Fi retrieval: The script only pulls passwords for profiles stored locally with plaintext keys enabled.
+
+📌 Recommendations for Future Releases
+Use a GUI or TUI framework like dialog or PowerShell forms for more professional UI.
+
+Integrate public APIs for breach checks instead of manual browser redirection.
+
+Add an "Export All Results" feature.
+
+Build .exe version via a batch-to-exe converter for distribution.
