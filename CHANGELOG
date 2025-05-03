@@ -1,123 +1,51 @@
-Changelog for NREM OSINT Tool
+🛠 NREM v1.3 Patch Notes (May 2025)
+🆕 New Features
+🔍 OSINT Enhancements:
+[NEW] Phone Number OSINT Tool – Launches Truecaller in browser for manual lookup.
 
-Version 1.1
-Date: 2025-05-03
+[NEW] Wayback Machine Lookup – Check archived snapshots of any website.
 
-Changes and Improvements:
-----------------------------
+[NEW] IP Range Scanner – Scan any subnet (e.g., 192.168.0.1–254) for active IPs.
 
-1. **New Feature: Email Breach Check**
-   - Added a new option (9) for checking email breaches.
-   - Opens the "Have I Been Pwned" website with the entered email address to check if it has been involved in any known data breaches.
+[NEW] Username Availability Checker – Launches Namechk to check username availability across many platforms.
 
-2. **Bug Fixes and Enhancements:**
-   - Fixed **Email Breach Check** functionality.
-   - Added an **echo statement** to notify users that the email breach check is in progress and that the browser will open.
-   - Enhanced **WHOIS lookup** by adding a fallback if the `whois` command is not available or fails to fetch data.
-   - Improved **user feedback** for actions such as IP geolocation lookup and social media searches.
+📶 Local Recon Upgrades:
+[Improved] Wi-Fi Password Dumper – Now fetches all saved Wi-Fi passwords with SSID labels and outputs cleanly into wifi_passwords.txt.
 
-3. **UI/UX Improvements:**
-   - Enhanced the console output formatting, making the results more readable and easier to follow.
-   - Improved **pause** prompts after each action to provide users with adequate time to view the results.
+🌐 Recon Tools:
+Shodan Search Integration – Quickly launch IP/domain queries on Shodan.
 
-4. **General Optimizations:**
-   - Cleaned up and organized code structure for better readability and maintenance.
-   - Added **additional error handling** to address potential failures with external commands (`whois`, `curl`, etc.).
-   - Updated the tool version to **v1.1** for clarity and version control.
+Reverse DNS Lookup – Gets hostname for a given IP.
 
-This version improves usability and fixes critical issues, enhancing the overall user experience.
+Reverse IP Lookup – Basic reverse DNS implementation.
 
-----------------------------
-End of Changelog
-______________________________________________________________________________________________
+Metadata Extraction – Uses exiftool to dump file metadata.
 
-🔄 NREM v1.2 Changelog
-Release Date: May 2025
-Project Name: NREM (Network Reconnaissance & Enumeration Module)
-Developer: Linux Services
+Pastebin Email Leak Search – Opens a Pastebin query for email exposure.
 
-✅ What's New
-🔧 Added Features:
-[Option 10] HTTP Headers Check
+Google Dork Generator – Generate and test dorks via Google Search.
 
-Uses curl -I to fetch and display response headers for any given URL.
+⚙️ Internal/UX Improvements
+Fixed delayed variable expansion issues during Wi-Fi scan (no more !ssid! crash).
 
-Output saved to headers.txt.
+Cleaned up temp file handling (e.g., temp_profiles.txt, .txt logs).
 
-[Option 11] Reverse DNS Lookup
+Each tool now clearly tells where output is saved (like headers.txt, geolocate_result.txt, etc.).
 
-Uses nslookup to resolve an IP address to its hostname.
+Default console size adjusted to 100x30 for wider output compatibility.
 
-Output saved to reverse_dns.txt.
+UTF-8 encoding added (chcp 65001) for broader character support.
 
-🖼️ UI/Visual Enhancements
-New color-coded ASCII banner using ANSI escape codes for clearer terminal appearance.
+🐞 Known/Possible Bugs & Issues
+Type	Description
+❗ Critical	Crash when ssid has leading/trailing spaces or special characters. Might still cause parsing issues in wifi_passwords.txt.
+❗ Critical	whois not guaranteed on all Windows setups. User may see “WHOIS command not available.”
+⚠️ Moderate	If exiftool is missing, metadata feature will silently fail.
+⚠️ Moderate	powershell Test-NetConnection port scan may fail on older systems or with restricted permissions.
+⚠️ Moderate	curl dependency is mandatory; users on Windows 7 or older may not have it.
+⚠️ Minor	Some Google searches (social media, dorks, etc.) may not return accurate results due to regional differences or CAPTCHA.
+⚠️ Minor	Phone OSINT and username checker just open external sites – no API integration or data parsing yet.
+🧪 Experimental	Reverse DNS and IP lookup just use nslookup, which isn't reliable for full reconnaissance.
 
-Menu spacing and numbering now more readable and uniform.
 
-Added real-time clock display.
 
-Cleaner section headers (call :header) for better navigation and reuse.
-
-📁 Structural & Quality Improvements
-Output files like active_ips.txt, wifi_passwords.txt, geolocate_result.txt, etc., are now cleaned/created at startup for reliability.
-
-Introduced a logs/ directory (currently unused, but intended for future logging support).
-
-Ensured all temporary files (e.g., temp_profiles.txt) are deleted after use.
-
-Code modularization via call :header for header reuse.
-
-Improved error handling for whois and external tools.
-
-Enhanced consistency in naming output files for clarity.
-
-🐞 Known/Possible Bugs or Limitations
-WHOIS command may fail if the whois utility is not installed or available in the system PATH.
-
-Curl dependency: Both geolocation and HTTP header checks require curl, which may not be pre-installed on all Windows systems.
-
-PowerShell Port Scan may be slow depending on the network and machine performance.
-
-Reverse DNS lookups are dependent on DNS configurations and may not return results for all IPs.
-
-Limited Wi-Fi retrieval: The script only pulls passwords for profiles stored locally with plaintext keys enabled.
-
-📌 Recommendations for Future Releases
-Use a GUI or TUI framework like dialog or PowerShell forms for more professional UI.
-
-Integrate public APIs for breach checks instead of manual browser redirection.
-
-Add an "Export All Results" feature.
-
-Build .exe version via a batch-to-exe converter for distribution.
-
-_______________________________________________________________________________
-NREM OSINT Tool - v1.2.1 Patch Notes
-Bug Fixes:
-Option 1 - Scan for Active IPs and Wi-Fi Passwords:
-
-Issue: The tool was hanging or freezing during the scanning of active IPs.
-
-Fix:
-
-Increased the ping timeout from -w 10 to -w 200 to allow more time for devices to respond.
-
-Added real-time feedback for each IP being scanned to prevent the tool from seeming stuck.
-
-Ensured that active IPs are saved only after a successful response.
-
-New Features:
-Real-Time IP Scanning Feedback:
-
-As the script scans for active IPs, it will now display each IP in real-time with the message Scanning 192.168.1.%%i.
-
-Improvements:
-Script Cleanup:
-
-Added cleanup steps for previously existing files (active_ips.txt, wifi_passwords.txt, etc.) before writing new data.
-
-Improved the script structure for better readability and maintainability.
-
-Known Issues:
-No new issues reported in this patch.
