@@ -9,13 +9,17 @@ color 01
 mode con: cols=100 lines=30
 
 :: Title
-title NREM PROJECT - OSINT Tool v1.2.1
+title NREM PROJECT - OSINT Tool v1.3
 
 :: Create required directories
 if not exist logs mkdir logs
 if exist active_ips.txt del active_ips.txt
 if exist wifi_passwords.txt del wifi_passwords.txt
 if exist geolocate_result.txt del geolocate_result.txt
+
+:: Check for required tools
+where curl >nul 2>nul || (echo ERROR: 'curl' is not available. Install it or upgrade to Windows 10+. & pause & exit)
+where whois >nul 2>nul || echo WARNING: 'whois' is not available. WHOIS lookup may not work.
 
 :main
 cls
@@ -33,8 +37,20 @@ echo [8]  DNS Records Lookup
 echo [9]  Email Breach Check
 echo [10] HTTP Headers Check
 echo [11] Reverse DNS Lookup
+echo [12] Subdomain Finder
+echo [13] Reverse IP Lookup (Hostnames)
+echo [14] Google Dork Generator
+echo [15] Shodan Lookup
+echo [16] Metadata Extractor (via exiftool)
+echo [17] Pastebin Email Leak Search
+echo [18] Username Availability Checker
+echo [19] Phone Number OSINT
+echo [20] Wayback Machine Lookup
+echo [21] IP Range Scanner
 echo [0]  Exit
 set /p choice=Choose an option: 
+
+if not defined choice goto main
 
 if "%choice%"=="1" goto scanips
 if "%choice%"=="2" goto pingip
@@ -47,21 +63,33 @@ if "%choice%"=="8" goto dnslookup
 if "%choice%"=="9" goto emailbreach
 if "%choice%"=="10" goto headerscheck
 if "%choice%"=="11" goto reversedns
+if "%choice%"=="12" goto subdomains
+if "%choice%"=="13" goto reverseip
+if "%choice%"=="14" goto dorkgen
+if "%choice%"=="15" goto shodan
+if "%choice%"=="16" goto metadata
+if "%choice%"=="17" goto pastebin
+if "%choice%"=="18" goto usernamecheck
+if "%choice%"=="19" goto phoneosint
+if "%choice%"=="20" goto wayback
+if "%choice%"=="21" goto iprangescan
 if "%choice%"=="0" exit
+echo Invalid option. Try again.
+pause
 goto main
 
 :header
 echo.
-echo [94m==============================================[0m
-echo [96m ███╗   ██╗██████╗ ███████╗███╗  ███╗[0m
-echo [96m ████╗  ██║██╔══██╗██╔════╝████╗ ████║[0m
-echo [96m ██╔██╗ ██║██║  ██║█████╗  ██╔████╔██║[0m
-echo [96m ██║╚██╗██║██║  ██║██╔══╝  ██║╚██╔╝██║[0m
-echo [96m ██║ ╚████║██████╔╝███████╗██║ ╚═╝ ██║[0m
-echo [96m ╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝     ╚═╝[0m
-echo [94m==============================================[0m
+echo ==============================================
+echo  ███╗   ██╗██████╗ ███████╗███╗  ███╗
+echo  ████╗  ██║██╔══██╗██╔════╝████╗ ████║
+echo  ██╔██╗ ██║██║  ██║█████╗  ██╔████╔██║
+echo  ██║╚██╗██║██║  ██║██╔══╝  ██║╚██╔╝██║
+echo  ██║ ╚████║██████╔╝███████╗██║ ╚═╝ ██║
+echo  ╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝     ╚═╝
+echo ==============================================
 echo NREM PROJECT - made by Linux Services
-echo Version 1.2.1
+echo Version 1.3
 echo Time: %time%
 echo.
 exit /b
@@ -106,7 +134,7 @@ exit /b
 cls
 call :header
 set /p ip=Enter IP to ping: 
-ping %ip%
+ping "%ip%"
 pause
 goto main
 
@@ -114,7 +142,7 @@ goto main
 cls
 call :header
 set /p ip=Enter IP to scan ports (1–1024): 
-powershell -Command "1..1024 | ForEach-Object { if (Test-NetConnection -ComputerName '%ip%' -Port $_ -InformationLevel Quiet) { Write-Host ('Port open: ' + $_) } }"
+powershell -Command "1..1024 | ForEach-Object { try { if (Test-NetConnection -ComputerName '%ip%' -Port $_ -InformationLevel Quiet) { Write-Host ('Port open: ' + $_) } } catch {} }"
 pause
 goto main
 
@@ -134,7 +162,7 @@ goto main
 cls
 call :header
 set /p username=Enter username to search for: 
-start "" "https://www.google.com/search?q=%username%+site:twitter.com+OR+site:instagram.com+OR+site:tiktok.com+OR+site:facebook.com"
+start "" "https://www.google.com/search?q=%username: =+%+site:twitter.com+OR+site:instagram.com+OR+site:tiktok.com+OR+site:facebook.com"
 pause
 goto main
 
@@ -142,7 +170,7 @@ goto main
 cls
 call :header
 set /p keyword=Enter keyword to search in text: 
-start "" "https://www.google.com/search?q=intext:%keyword%"
+start "" "https://www.google.com/search?q=intext:%keyword: =+%"
 pause
 goto main
 
@@ -182,7 +210,7 @@ goto main
 cls
 call :header
 set /p url=Enter URL (with https://) to check headers: 
-curl -I %url% > headers.txt
+curl -I "%url%" > headers.txt
 type headers.txt
 echo HTTP headers saved to headers.txt
 pause
@@ -192,8 +220,94 @@ goto main
 cls
 call :header
 set /p ip=Enter IP for reverse DNS lookup: 
-nslookup %ip% > reverse_dns.txt
+nslookup "%ip%" > reverse_dns.txt
 type reverse_dns.txt
 echo Reverse DNS info saved to reverse_dns.txt
+pause
+goto main
+
+:subdomains
+cls
+call :header
+set /p domain=Enter domain to find subdomains: 
+start "" "https://crt.sh/?q=%domain%"
+pause
+goto main
+
+:reverseip
+cls
+call :header
+set /p ip=Enter IP for reverse lookup: 
+nslookup "%ip%" > reverse_ip.txt
+type reverse_ip.txt
+pause
+goto main
+
+:dorkgen
+cls
+call :header
+set /p dork=Enter Google Dork (e.g., site:, filetype:, inurl:): 
+start "" "https://www.google.com/search?q=%dork: =+%"
+pause
+goto main
+
+:shodan
+cls
+call :header
+set /p target=Enter IP/domain for Shodan search: 
+start "" "https://www.shodan.io/search?query=%target: =+%"
+pause
+goto main
+
+:metadata
+cls
+call :header
+set /p filepath=Enter path to file (requires exiftool): 
+exiftool "%filepath%" > metadata.txt
+type metadata.txt
+pause
+goto main
+
+:pastebin
+cls
+call :header
+set /p email=Enter email to search on Pastebin: 
+start "" "https://pastebin.com/search?q=%email%"
+pause
+goto main
+
+:usernamecheck
+cls
+call :header
+set /p username=Enter username to check: 
+start "" "https://namechk.com/"
+pause
+goto main
+
+:phoneosint
+cls
+call :header
+set /p number=Enter phone number: 
+start "" "https://www.truecaller.com/"
+pause
+goto main
+
+:wayback
+cls
+call :header
+set /p site=Enter website URL to check archive: 
+start "" "https://web.archive.org/web/*/%site%"
+pause
+goto main
+
+:iprangescan
+cls
+call :header
+set /p base=Enter base IP (e.g., 192.168.0): 
+for /L %%i in (1,1,254) do (
+    echo Pinging %%i...
+    ping -n 1 -w 200 %base%.%%i | find "TTL=" && echo %base%.%%i >> scanned_range.txt
+)
+echo Results saved to scanned_range.txt
 pause
 goto main
