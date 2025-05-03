@@ -9,7 +9,7 @@ color 01
 mode con: cols=100 lines=30
 
 :: Title
-title NREM PROJECT - OSINT Tool v1.2
+title NREM PROJECT - OSINT Tool v1.2.1
 
 :: Create required directories
 if not exist logs mkdir logs
@@ -61,7 +61,7 @@ echo [96m ██║ ╚████║██████╔╝█████�
 echo [96m ╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝     ╚═╝[0m
 echo [94m==============================================[0m
 echo NREM PROJECT - made by Linux Services
-echo Version 1.2
+echo Version 1.2.1
 echo Time: %time%
 echo.
 exit /b
