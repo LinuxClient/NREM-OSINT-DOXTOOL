@@ -1,3 +1,9 @@
+PREVIEW!
+
+![Screenshot 2025-05-03 103654](https://github.com/user-attachments/assets/21eb0f15-80dc-42ab-93a9-c7da460ada9f)
+
+
+
 # NREM-OSINT-DOXTOOL
 THIS TOOL IS USED FOR OSINT AND DOXXING PURPOSES. FOR EDUCATIONAL PURPOSES
 
