@@ -1,0 +1,8 @@
+KNOWN BUGS!
+- UI/Display Bugs: Some UI features may appear unorganized or broken due to compatibility issues with Windows command prompt and batch scripting limitations. We are working on improving the visual structure of the tool.
+
+- Wi-Fi Password Retrieval: The Wi-Fi password retrieval feature may not work on all systems due to different versions of Windows or system configurations. Ensure you have the required permissions (Administrator) to run this feature.
+
+- Geolocation Display: The geolocation output might not always be perfectly formatted and may require some manual inspection. This will be improved in future versions.
+
+- Scanning Delays: Scanning for active IPs and Wi-Fi passwords may take some time due to the nature of the network scan. We are working on optimizations to speed this up without compromising accuracy.
