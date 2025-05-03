@@ -23,6 +23,7 @@ echo ╚═╝  ╚═══╝╚═════╝ ╚══════╝╚
 echo.
 echo             NREM PROJECT
 echo         made by Linux Services
+echo                  v1.1
 echo -------------------------------------
 echo Time: %time%
 echo.
@@ -32,6 +33,9 @@ echo [3] Scan for Open Ports
 echo [4] IP Geolocation Lookup
 echo [5] Search for Social Media Accounts
 echo [6] Intext/Keyword Web Search
+echo [7] Domain WHOIS Lookup
+echo [8] DNS Records Lookup
+echo [9] Email Breach Check
 echo [0] Exit
 echo.
 set /p choice=Choose an option: 
@@ -42,6 +46,9 @@ if "%choice%"=="3" goto portscan
 if "%choice%"=="4" goto geolocate
 if "%choice%"=="5" goto socialsearch
 if "%choice%"=="6" goto intextsearch
+if "%choice%"=="7" goto whoislookup
+if "%choice%"=="8" goto dnslookup
+if "%choice%"=="9" goto emailbreach
 if "%choice%"=="0" exit
 goto main
 
@@ -144,5 +151,40 @@ cls
 set /p keyword=Enter keyword to search in text: 
 start "" "https://www.google.com/search?q=intext:%keyword%"
 echo Opened browser to search intext keyword.
+pause
+goto main
+
+:whoislookup
+cls
+set /p domain=Enter domain to lookup (e.g., example.com): 
+echo Fetching WHOIS info...
+whois %domain% > whois_result.txt 2>nul
+if exist whois_result.txt (
+    type whois_result.txt
+    echo.
+    echo WHOIS information saved to whois_result.txt
+) else (
+    echo WHOIS command not available or failed.
+)
+pause
+goto main
+
+:dnslookup
+cls
+set /p domain=Enter domain to check DNS records (e.g., example.com): 
+echo Fetching DNS info...
+nslookup %domain% > dns_result.txt
+type dns_result.txt
+echo.
+echo DNS info saved to dns_result.txt
+pause
+goto main
+
+:emailbreach
+cls
+set /p email=Enter email address to check for breaches: 
+echo Checking if the email is compromised...
+start "" "https://haveibeenpwned.com/"
+echo Opened browser to check email breach status.
 pause
 goto main
