@@ -1,0 +1,31 @@
+Changelog for NREM OSINT Tool
+
+Version 1.1
+Date: 2025-05-03
+
+Changes and Improvements:
+----------------------------
+
+1. **New Feature: Email Breach Check**
+   - Added a new option (9) for checking email breaches.
+   - Opens the "Have I Been Pwned" website with the entered email address to check if it has been involved in any known data breaches.
+
+2. **Bug Fixes and Enhancements:**
+   - Fixed **Email Breach Check** functionality.
+   - Added an **echo statement** to notify users that the email breach check is in progress and that the browser will open.
+   - Enhanced **WHOIS lookup** by adding a fallback if the `whois` command is not available or fails to fetch data.
+   - Improved **user feedback** for actions such as IP geolocation lookup and social media searches.
+
+3. **UI/UX Improvements:**
+   - Enhanced the console output formatting, making the results more readable and easier to follow.
+   - Improved **pause** prompts after each action to provide users with adequate time to view the results.
+
+4. **General Optimizations:**
+   - Cleaned up and organized code structure for better readability and maintenance.
+   - Added **additional error handling** to address potential failures with external commands (`whois`, `curl`, etc.).
+   - Updated the tool version to **v1.1** for clarity and version control.
+
+This version improves usability and fixes critical issues, enhancing the overall user experience.
+
+----------------------------
+End of Changelog
