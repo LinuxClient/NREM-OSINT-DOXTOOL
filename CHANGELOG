@@ -29,7 +29,7 @@ This version improves usability and fixes critical issues, enhancing the overall
 
 ----------------------------
 End of Changelog
-
+______________________________________________________________________________________________
 
 🔄 NREM v1.2 Changelog
 Release Date: May 2025
@@ -91,3 +91,33 @@ Integrate public APIs for breach checks instead of manual browser redirection.
 Add an "Export All Results" feature.
 
 Build .exe version via a batch-to-exe converter for distribution.
+
+_______________________________________________________________________________
+NREM OSINT Tool - v1.2.1 Patch Notes
+Bug Fixes:
+Option 1 - Scan for Active IPs and Wi-Fi Passwords:
+
+Issue: The tool was hanging or freezing during the scanning of active IPs.
+
+Fix:
+
+Increased the ping timeout from -w 10 to -w 200 to allow more time for devices to respond.
+
+Added real-time feedback for each IP being scanned to prevent the tool from seeming stuck.
+
+Ensured that active IPs are saved only after a successful response.
+
+New Features:
+Real-Time IP Scanning Feedback:
+
+As the script scans for active IPs, it will now display each IP in real-time with the message Scanning 192.168.1.%%i.
+
+Improvements:
+Script Cleanup:
+
+Added cleanup steps for previously existing files (active_ips.txt, wifi_passwords.txt, etc.) before writing new data.
+
+Improved the script structure for better readability and maintainability.
+
+Known Issues:
+No new issues reported in this patch.
