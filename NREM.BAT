@@ -68,16 +68,21 @@ exit /b
 
 :scanips
 cls
-call :header
 echo Scanning local network for active IPs...
-echo Please wait...
-(for /L %%i in (1,1,254) do (
-    ping -n 1 -w 10 192.168.1.%%i | find "TTL=" >nul && echo 192.168.1.%%i >> active_ips.txt
-))
+echo Please wait, this might take a minute...
+del active_ips.txt 2>nul
+
+for /L %%i in (1,1,254) do (
+    echo Scanning 192.168.1.%%i
+    ping -n 1 -w 200 192.168.1.%%i | find "TTL=" >nul
+    if not errorlevel 1 echo 192.168.1.%%i >> active_ips.txt
+)
+
+arp -a >> active_ips.txt
 echo.
 echo Active IPs saved to active_ips.txt
 
-:: Wi-Fi password extraction
+echo.
 echo Retrieving saved Wi-Fi passwords...
 netsh wlan show profiles > temp_profiles.txt
 for /f "tokens=2 delims=:" %%A in ('findstr "All User Profile" temp_profiles.txt') do (
