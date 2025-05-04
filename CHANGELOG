@@ -1,3 +1,21 @@
+🛠️ NREM Project – Patch Notes v1.3.1
+🔧 Fixed
+Geolocation Repetition Bug:
+Resolved a critical issue in the :geolocate function where the API response from ip-api.com was duplicated multiple times. The function now correctly fetches and displays a single, clean set of geolocation data for the given IP.
+
+✅ Improved
+Output Parsing:
+The geolocation output is now filtered and formatted to show only relevant fields like City, Region, Country, ISP, Organization, Latitude, and Longitude.
+
+File Cleanup:
+Ensured temporary JSON and result files are properly overwritten to avoid old data being reused.
+
+
+__________________________________________________________________________________________
+
+
+
+
 🛠 NREM v1.3 Patch Notes (May 2025)
 🆕 New Features
 🔍 OSINT Enhancements:
