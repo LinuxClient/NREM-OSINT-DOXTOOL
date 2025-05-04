@@ -2,6 +2,9 @@
 :: Set UTF-8 code page for better character support
 chcp 65001 >nul
 
+setlocal EnableDelayedExpansion
+
+
 :: Force color to blue text on black background (1F)
 color 01
 
@@ -149,12 +152,30 @@ goto main
 :geolocate
 cls
 call :header
+setlocal EnableDelayedExpansion
 set /p ip=Enter IP to geolocate: 
-curl -s "http://ip-api.com/json/%ip%" > geolocate_result.json
-(for %%A in (country city region zip isp org lat lon) do findstr /i "%%A" geolocate_result.json) > geolocate_result.txt
+
+:: Get JSON response
+curl -s "http://ip-api.com/json/%ip%" > geolocate_raw.json
+
+:: Clean up the output
+del geolocate_result.txt 2>nul
+(for /f "usebackq delims=" %%A in ("geolocate_raw.json") do (
+    set "line=%%A"
+    set "line=!line:{=!"
+    set "line=!line:}=!"
+    set "line=!line:,=!"
+    for %%B in (!line!) do (
+        echo %%B | findstr /r /i "country regionName city zip isp org lat lon" >> geolocate_result.txt
+    )
+))
+
+:: Show results
+echo.
 type geolocate_result.txt
 echo.
 echo Saved to geolocate_result.txt
+endlocal
 pause
 goto main
 
