@@ -1,9 +1,10 @@
 @echo off
 :: Set UTF-8 code page for better character support
 chcp 65001 >nul
-
 setlocal EnableDelayedExpansion
 
+:: Change to script's directory
+cd /d "%~dp0"
 
 :: Force color to blue text on black background (1F)
 color 01
@@ -19,6 +20,9 @@ if not exist logs mkdir logs
 if exist active_ips.txt del active_ips.txt
 if exist wifi_passwords.txt del wifi_passwords.txt
 if exist geolocate_result.txt del geolocate_result.txt
+
+:: Timestamp for logs
+for /f "tokens=1-4 delims=/:. " %%a in ("%date% %time%") do set timestamp=%%d-%%b-%%c_%%a%%b
 
 :: Check for required tools
 where curl >nul 2>nul || (echo ERROR: 'curl' is not available. Install it or upgrade to Windows 10+. & pause & exit)
@@ -55,63 +59,43 @@ set /p choice=Choose an option:
 
 if not defined choice goto main
 
-if "%choice%"=="1" goto scanips
-if "%choice%"=="2" goto pingip
-if "%choice%"=="3" goto portscan
-if "%choice%"=="4" goto geolocate
-if "%choice%"=="5" goto socialsearch
-if "%choice%"=="6" goto intextsearch
-if "%choice%"=="7" goto whoislookup
-if "%choice%"=="8" goto dnslookup
-if "%choice%"=="9" goto emailbreach
-if "%choice%"=="10" goto headerscheck
-if "%choice%"=="11" goto reversedns
-if "%choice%"=="12" goto subdomains
-if "%choice%"=="13" goto reverseip
-if "%choice%"=="14" goto dorkgen
-if "%choice%"=="15" goto shodan
-if "%choice%"=="16" goto metadata
-if "%choice%"=="17" goto pastebin
-if "%choice%"=="18" goto usernamecheck
-if "%choice%"=="19" goto phoneosint
-if "%choice%"=="20" goto wayback
-if "%choice%"=="21" goto iprangescan
-if "%choice%"=="0" exit
+for %%i in (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 0) do (
+    if "%choice%"=="%%i" goto opt%%i
+)
 echo Invalid option. Try again.
-pause
-goto main
+call :pauseAndReturn
 
 :header
 echo.
-echo ==============================================
-echo  ███╗   ██╗██████╗ ███████╗███╗  ███╗
-echo  ████╗  ██║██╔══██╗██╔════╝████╗ ████║
-echo  ██╔██╗ ██║██║  ██║█████╗  ██╔████╔██║
-echo  ██║╚██╗██║██║  ██║██╔══╝  ██║╚██╔╝██║
-echo  ██║ ╚████║██████╔╝███████╗██║ ╚═╝ ██║
-echo  ╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝     ╚═╝
-echo ==============================================
+echo ===================================================
+echo         ███╗   ██╗███████╗██████╗ ███╗   ███╗      
+echo         ████╗  ██║██╔════╝██╔══██╗████╗ ████║      
+echo         ██╔██╗ ██║█████╗  ██████╔╝██╔████╔██║      
+echo         ██║╚██╗██║██╔══╝  ██╔══██╗██║╚██╔╝██║      
+echo         ██║ ╚████║███████╗██║  ██║██║ ╚═╝ ██║      
+echo         ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝      
+echo ===================================================
 echo NREM PROJECT - made by Linux Services
 echo Version 1.3
 echo Time: %time%
 echo.
 exit /b
 
-:scanips
+:pauseAndReturn
+echo.
+pause
+goto main
+
+:opt1
 cls
 echo Scanning local network for active IPs...
-echo Please wait, this might take a minute...
-del active_ips.txt 2>nul
-
-for /L %%i in (1,1,254) do (
-    echo Scanning 192.168.1.%%i
-    ping -n 1 -w 200 192.168.1.%%i | find "TTL=" >nul
-    if not errorlevel 1 echo 192.168.1.%%i >> active_ips.txt
-)
-
+set "baseip=192.168.1"
+(for /L %%i in (1,1,254) do (
+    echo Scanning !baseip!.%%i
+    ping -n 1 -w 150 !baseip!.%%i | find "TTL=" && echo !baseip!.%%i >> active_ips.txt
+))
 arp -a >> active_ips.txt
-echo.
-echo Active IPs saved to active_ips.txt
+copy active_ips.txt logs\active_ips_%timestamp%.txt >nul
 
 echo.
 echo Retrieving saved Wi-Fi passwords...
@@ -121,9 +105,8 @@ for /f "tokens=2 delims=:" %%A in ('findstr "All User Profile" temp_profiles.txt
     call :getpw
 )
 del temp_profiles.txt
-echo Wi-Fi passwords saved to wifi_passwords.txt
-pause
-goto main
+copy wifi_passwords.txt logs\wifi_passwords_%timestamp%.txt >nul
+call :pauseAndReturn
 
 :getpw
 setlocal enabledelayedexpansion
@@ -133,202 +116,171 @@ netsh wlan show profile name="!ssid!" key=clear | find "Key Content" >> wifi_pas
 endlocal
 exit /b
 
-:pingip
+:opt2
 cls
 call :header
 set /p ip=Enter IP to ping: 
 ping "%ip%"
-pause
-goto main
+call :pauseAndReturn
 
-:portscan
+:opt3
 cls
 call :header
 set /p ip=Enter IP to scan ports (1–1024): 
 powershell -Command "1..1024 | ForEach-Object { try { if (Test-NetConnection -ComputerName '%ip%' -Port $_ -InformationLevel Quiet) { Write-Host ('Port open: ' + $_) } } catch {} }"
-pause
-goto main
+call :pauseAndReturn
 
-:geolocate
+:opt4
 cls
 call :header
-setlocal EnableDelayedExpansion
 set /p ip=Enter IP to geolocate: 
-
-:: Get JSON response
-curl -s "http://ip-api.com/json/%ip%" > geolocate_raw.json
-
-:: Clean up the output
-del geolocate_result.txt 2>nul
-(for /f "usebackq delims=" %%A in ("geolocate_raw.json") do (
-    set "line=%%A"
-    set "line=!line:{=!"
-    set "line=!line:}=!"
-    set "line=!line:,=!"
-    for %%B in (!line!) do (
-        echo %%B | findstr /r /i "country regionName city zip isp org lat lon" >> geolocate_result.txt
-    )
+curl -s "http://ip-api.com/json/%ip%" > geo.json
+(for %%G in (country regionName city zip isp org lat lon) do (
+    findstr "%%G" geo.json >> geolocate_result.txt
 ))
-
-:: Show results
-echo.
+copy geolocate_result.txt logs\geolocate_%timestamp%.txt >nul
 type geolocate_result.txt
-echo.
-echo Saved to geolocate_result.txt
-endlocal
-pause
-goto main
+call :pauseAndReturn
 
-:socialsearch
+:opt5
 cls
 call :header
 set /p username=Enter username to search for: 
 start "" "https://www.google.com/search?q=%username: =+%+site:twitter.com+OR+site:instagram.com+OR+site:tiktok.com+OR+site:facebook.com"
-pause
-goto main
+call :pauseAndReturn
 
-:intextsearch
+:opt6
 cls
 call :header
 set /p keyword=Enter keyword to search in text: 
 start "" "https://www.google.com/search?q=intext:%keyword: =+%"
-pause
-goto main
+call :pauseAndReturn
 
-:whoislookup
+:opt7
 cls
 call :header
 set /p domain=Enter domain to lookup: 
 whois %domain% > whois_result.txt 2>nul
 if exist whois_result.txt (
     type whois_result.txt
-    echo WHOIS information saved to whois_result.txt
+    copy whois_result.txt logs\whois_%timestamp%.txt >nul
+    echo WHOIS information saved.
 ) else (
     echo WHOIS command not available or failed.
 )
-pause
-goto main
+call :pauseAndReturn
 
-:dnslookup
+:opt8
 cls
 call :header
 set /p domain=Enter domain for DNS check: 
 nslookup %domain% > dns_result.txt
 type dns_result.txt
-echo DNS info saved to dns_result.txt
-pause
-goto main
+copy dns_result.txt logs\dns_%timestamp%.txt >nul
+call :pauseAndReturn
 
-:emailbreach
+:opt9
 cls
 call :header
 set /p email=Enter email to check: 
 start "" "https://haveibeenpwned.com/"
-pause
-goto main
+call :pauseAndReturn
 
-:headerscheck
+:opt10
 cls
 call :header
 set /p url=Enter URL (with https://) to check headers: 
 curl -I "%url%" > headers.txt
 type headers.txt
-echo HTTP headers saved to headers.txt
-pause
-goto main
+copy headers.txt logs\headers_%timestamp%.txt >nul
+call :pauseAndReturn
 
-:reversedns
+:opt11
 cls
 call :header
 set /p ip=Enter IP for reverse DNS lookup: 
 nslookup "%ip%" > reverse_dns.txt
 type reverse_dns.txt
-echo Reverse DNS info saved to reverse_dns.txt
-pause
-goto main
+copy reverse_dns.txt logs\reverse_dns_%timestamp%.txt >nul
+call :pauseAndReturn
 
-:subdomains
+:opt12
 cls
 call :header
 set /p domain=Enter domain to find subdomains: 
 start "" "https://crt.sh/?q=%domain%"
-pause
-goto main
+call :pauseAndReturn
 
-:reverseip
+:opt13
 cls
 call :header
 set /p ip=Enter IP for reverse lookup: 
 nslookup "%ip%" > reverse_ip.txt
 type reverse_ip.txt
-pause
-goto main
+copy reverse_ip.txt logs\reverse_ip_%timestamp%.txt >nul
+call :pauseAndReturn
 
-:dorkgen
+:opt14
 cls
 call :header
 set /p dork=Enter Google Dork (e.g., site:, filetype:, inurl:): 
 start "" "https://www.google.com/search?q=%dork: =+%"
-pause
-goto main
+call :pauseAndReturn
 
-:shodan
+:opt15
 cls
 call :header
 set /p target=Enter IP/domain for Shodan search: 
 start "" "https://www.shodan.io/search?query=%target: =+%"
-pause
-goto main
+call :pauseAndReturn
 
-:metadata
+:opt16
 cls
 call :header
 set /p filepath=Enter path to file (requires exiftool): 
 exiftool "%filepath%" > metadata.txt
 type metadata.txt
-pause
-goto main
+copy metadata.txt logs\metadata_%timestamp%.txt >nul
+call :pauseAndReturn
 
-:pastebin
+:opt17
 cls
 call :header
 set /p email=Enter email to search on Pastebin: 
 start "" "https://pastebin.com/search?q=%email%"
-pause
-goto main
+call :pauseAndReturn
 
-:usernamecheck
+:opt18
 cls
 call :header
 set /p username=Enter username to check: 
 start "" "https://namechk.com/"
-pause
-goto main
+call :pauseAndReturn
 
-:phoneosint
+:opt19
 cls
 call :header
 set /p number=Enter phone number: 
 start "" "https://www.truecaller.com/"
-pause
-goto main
+call :pauseAndReturn
 
-:wayback
+:opt20
 cls
 call :header
 set /p site=Enter website URL to check archive: 
 start "" "https://web.archive.org/web/*/%site%"
-pause
-goto main
+call :pauseAndReturn
 
-:iprangescan
+:opt21
 cls
 call :header
 set /p base=Enter base IP (e.g., 192.168.0): 
-for /L %%i in (1,1,254) do (
+(for /L %%i in (1,1,254) do (
     echo Pinging %%i...
     ping -n 1 -w 200 %base%.%%i | find "TTL=" && echo %base%.%%i >> scanned_range.txt
-)
-echo Results saved to scanned_range.txt
-pause
-goto main
+))
+copy scanned_range.txt logs\iprange_%timestamp%.txt >nul
+call :pauseAndReturn
+
+:opt0
+exit
