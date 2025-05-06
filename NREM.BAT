@@ -76,7 +76,7 @@ echo         ██║ ╚████║███████╗██║  █�
 echo         ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝      
 echo ===================================================
 echo NREM PROJECT - made by Linux Services
-echo Version 1.3
+echo Version 1.4
 echo Time: %time%
 echo.
 exit /b
