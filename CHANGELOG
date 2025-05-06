@@ -1,3 +1,55 @@
+📝 NREM OSINT Tool – Version 1.4 Changelog
+Release Date: 2025-05-05
+Author: Linux Services
+
+🔧 Improvements & Changes
+Enhanced UI with better layout and character encoding (chcp 65001).
+
+Standardized menu and module structure for easier navigation.
+
+Log files now include timestamps for improved organization.
+
+Replaced static output with more dynamic and interactive prompts.
+
+Auto-delete of previous session data for cleaner operation.
+
+Compatibility checks for required tools like curl, whois, and exiftool.
+
+🆕 New Features Added
+✅ Phone Number OSINT – Opens Truecaller to check number reputation.
+
+✅ Wayback Machine Lookup – View archived versions of websites.
+
+✅ Google Dork Generator – Automate dork-based queries for reconnaissance.
+
+✅ Shodan Search – Search IPs/domains directly via Shodan.
+
+✅ Pastebin Email Leak Search – Check if emails appear in Pastebin dumps.
+
+✅ Username Availability Checker – Opens Namechk to check username presence.
+
+✅ Email Breach Check – Quickly check known breaches using HIBP.
+
+✅ Subdomain Finder – Uses CRT.sh to list subdomains.
+
+✅ Reverse DNS & IP Lookup – NSLookup-based hostname enumeration.
+
+✅ IP Range Scanner – Ping-sweep a /24 subnet interactively.
+
+🛠️ Bug Fixes & Stability
+Resolved crashing when invalid or empty input was given.
+
+Improved error handling for missing commands (e.g., whois, netsh, exiftool).
+
+Suppressed unwanted console noise from tools.
+
+File outputs now cleanly overwrite old versions to avoid merge errors.
+
+
+
+
+
+
 🛠️ NREM Project – Patch Notes v1.3.1
 🔧 Fixed
 Geolocation Repetition Bug:
