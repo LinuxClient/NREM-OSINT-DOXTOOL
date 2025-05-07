@@ -1,27 +1,19 @@
 @echo off
-:: Set UTF-8 code page for better character support
 chcp 65001 >nul
 setlocal EnableDelayedExpansion
 
-:: Change to script's directory
 cd /d "%~dp0"
-
-:: Force color to blue text on black background (1F)
-color 01
-
-:: Set window size (Adjusted for compatibility)
+color 03
 mode con: cols=100 lines=30
-
-:: Title
-title NREM PROJECT - OSINT Tool v1.3
+title NREM PROJECT - OSINT Tool v1.4
 
 :: Create required directories
 if not exist logs mkdir logs
-if exist active_ips.txt del active_ips.txt
-if exist wifi_passwords.txt del wifi_passwords.txt
-if exist geolocate_result.txt del geolocate_result.txt
+del /f /q active_ips.txt >nul 2>&1
+del /f /q wifi_passwords.txt >nul 2>&1
+del /f /q geolocate_result.txt >nul 2>&1
 
-:: Timestamp for logs
+:: Timestamp
 for /f "tokens=1-4 delims=/:. " %%a in ("%date% %time%") do set timestamp=%%d-%%b-%%c_%%a%%b
 
 :: Check for required tools
@@ -31,8 +23,6 @@ where whois >nul 2>nul || echo WARNING: 'whois' is not available. WHOIS lookup m
 :main
 cls
 call :header
-
-:: Main menu
 echo [1]  Scan for Active IPs and Wi-Fi Passwords
 echo [2]  Ping IP Address
 echo [3]  Scan for Open Ports
@@ -54,12 +44,21 @@ echo [18] Username Availability Checker
 echo [19] Phone Number OSINT
 echo [20] Wayback Machine Lookup
 echo [21] IP Range Scanner
+echo [22] Dark Web Email Search (Ahmia)
+echo [23] Reverse Image Search
+echo [24] Disposable Email Checker
+echo [25] MAC Address Vendor Lookup
+echo [26] File Hash Lookup (VirusTotal)
+echo [27] Website Screenshot
+echo [28] robots.txt
+echo [29] Email Syntax and MX Validator
+echo [30] Public Exploit Search
+echo [31] Typosquatting Domain Scanner
 echo [0]  Exit
 set /p choice=Choose an option: 
 
 if not defined choice goto main
-
-for %%i in (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 0) do (
+for %%i in (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 0) do (
     if "%choice%"=="%%i" goto opt%%i
 )
 echo Invalid option. Try again.
@@ -67,14 +66,14 @@ call :pauseAndReturn
 
 :header
 echo.
-echo ===================================================
-echo         ███╗   ██╗███████╗██████╗ ███╗   ███╗      
-echo         ████╗  ██║██╔════╝██╔══██╗████╗ ████║      
-echo         ██╔██╗ ██║█████╗  ██████╔╝██╔████╔██║      
-echo         ██║╚██╗██║██╔══╝  ██╔══██╗██║╚██╔╝██║      
-echo         ██║ ╚████║███████╗██║  ██║██║ ╚═╝ ██║      
-echo         ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝      
-echo ===================================================
+echo _____________________________________________________ 
+echo ███╗   ██╗██████╗ ███████╗███╗   ███╗
+echo ████╗  ██║██╔══██╗██╔════╝████╗ ████║
+echo ██╔██╗ ██║██████╔╝█████╗  ██╔████╔██║
+echo ██║╚██╗██║██╔══██╗██╔══╝  ██║╚██╔╝██║
+echo ██║ ╚████║██║  ██║███████╗██║ ╚═╝ ██║
+echo ╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝
+echo _____________________________________________________                                     
 echo NREM PROJECT - made by Linux Services
 echo Version 1.4
 echo Time: %time%
@@ -86,7 +85,7 @@ echo.
 pause
 goto main
 
-:opt1
+::opt1
 cls
 echo Scanning local network for active IPs...
 set "baseip=192.168.1"
@@ -280,6 +279,108 @@ set /p base=Enter base IP (e.g., 192.168.0):
     ping -n 1 -w 200 %base%.%%i | find "TTL=" && echo %base%.%%i >> scanned_range.txt
 ))
 copy scanned_range.txt logs\iprange_%timestamp%.txt >nul
+call :pauseAndReturn
+
+:opt0
+exit
+:opt22
+cls
+call :header
+set /p email=Enter email to search on the dark web (Ahmia): 
+start "" "https://ahmia.fi/search/?q=%email%"
+call :pauseAndReturn
+
+:opt23
+cls
+call :header
+echo Upload or paste image URL for reverse search.
+start "" "https://images.google.com/"
+start "" "https://yandex.com/images/"
+call :pauseAndReturn
+
+:opt24
+cls
+call :header
+set /p email=Enter email to check for disposable domain: 
+for /f "tokens=2 delims=@" %%d in ("%email%") do set domain=%%d
+set disposable=no
+echo Checking common disposable domains...
+echo %domain% | findstr /i "mailinator tempmail guerrillamail 10minutemail yopmail trashmail" >nul && set disposable=yes
+if "%disposable%"=="yes" (
+    echo WARNING: Disposable email detected: %domain%
+) else (
+    echo Appears to be a regular domain.
+)
+call :pauseAndReturn
+
+:opt25
+cls
+call :header
+set /p mac=Enter MAC address (e.g., 44:38:39:ff:ef:57): 
+start "" "https://api.macvendors.com/%mac%"
+call :pauseAndReturn
+
+:opt26
+cls
+call :header
+set /p filepath=Enter path to file to hash and lookup: 
+certutil -hashfile "%filepath%" SHA256 > hash.txt
+for /f "skip=1 tokens=1" %%h in ('findstr /v "hash" hash.txt') do (
+    set hash=%%h
+    goto :gotHash
+)
+:gotHash
+start "" "https://www.virustotal.com/gui/search/%hash%"
+call :pauseAndReturn
+
+:opt27
+cls
+call :header
+set /p url=Enter website URL to screenshot: 
+start "" "https://www.site-shot.com/?url=%url%"
+call :pauseAndReturn
+
+:opt28
+cls
+call :header
+set /p domain=Enter domain (e.g., example.com): 
+curl -s https://%domain%/robots.txt > robots.txt
+curl -s https://%domain%/sitemap.xml > sitemap.xml
+echo --- robots.txt ---
+type robots.txt
+echo --- sitemap.xml ---
+type sitemap.xml
+call :pauseAndReturn
+
+:opt29
+cls
+call :header
+set /p email=Enter email to validate: 
+for /f "tokens=2 delims=@" %%a in ("%email%") do set domain=%%a
+echo Checking MX record for domain: %domain%
+nslookup -type=mx %domain%
+call :pauseAndReturn
+
+:opt30
+cls
+call :header
+set /p query=Enter software/CVE/product to search exploits for: 
+start "" "https://www.exploit-db.com/search?q=%query%"
+call :pauseAndReturn
+
+:opt31
+cls
+call :header
+set /p domain=Enter domain to typosquat: 
+echo Generating typosquatting variants...
+echo %domain% > typo_domains.txt
+echo %domain:~1% >> typo_domains.txt
+echo g%domain% >> typo_domains.txt
+echo %domain%1 >> typo_domains.txt
+echo %domain%.co >> typo_domains.txt
+echo %domain:~0,-1% >> typo_domains.txt
+echo Typo domain list saved to typo_domains.txt.
+type typo_domains.txt
 call :pauseAndReturn
 
 :opt0
