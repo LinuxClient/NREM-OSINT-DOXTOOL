@@ -7,60 +7,106 @@ PREVIEW!
 
 
 
-# NREM-OSINT-DOXTOOL
-THIS TOOL IS USED FOR OSINT AND DOXXING PURPOSES. FOR EDUCATIONAL PURPOSES
+NREM-OSINT-DOXTOOL
+THIS TOOL IS USED FOR OSINT AND DOXXING PURPOSES. FOR EDUCATIONAL PURPOSES ONLY.
 
-NREM PROJECT - OSINT Tool
-Overview
-The NREM (Network Reconnaissance and Enumeration Method) Project is an OSINT (Open Source Intelligence) tool designed to perform various network scanning tasks. The tool is primarily built using batch scripting and offers functionalities like:
+NREM PROJECT - OSINT Tool Overview
+The NREM (Network Reconnaissance and Enumeration Method) Project is an OSINT (Open Source Intelligence) tool designed to perform a wide variety of network scanning tasks. Built primarily using batch scripting, NREM v1.5 has expanded functionality to include network reconnaissance, email and domain validation, file hash checks, and new advanced features such as reverse image searches, disposable email checking, and much more.
 
-Scanning local networks for active IPs and Wi-Fi passwords.
+The tool aims to provide a comprehensive suite of OSINT features while being lightweight and easily accessible.
 
-Ping testing an IP address.
+New Features in v1.5
+Expanded OSINT Functionalities (Options 22-31):
 
-Scanning open ports on an IP.
+Option 22: Dark Web Email Search (Ahmia) – Search for emails on the dark web.
 
-Performing IP geolocation lookups.
+Option 23: Reverse Image Search – Upload or paste image URLs for reverse search via Google and Yandex.
 
-Searching for social media accounts associated with a username.
+Option 24: Disposable Email Checker – Identifies disposable email addresses.
 
-Conducting intext/keyword searches on the web.
+Option 25: MAC Address Vendor Lookup – Lookup vendor information for a given MAC address.
 
-The tool is a work-in-progress and is primarily for educational purposes. Please use responsibly and adhere to all applicable laws and ethical standards when using this tool.
+Option 26: File Hash Lookup (VirusTotal) – Hash a file and check it against VirusTotal for known threats.
 
-Features
-Scan for Active IPs and Wi-Fi Passwords: Scans your local network to find active IPs and retrieves saved Wi-Fi passwords.
+Option 27: Website Screenshot – Generate a screenshot of a website.
 
-Ping IP Address: Allows you to ping a specified IP address to test connectivity.
+Option 28: robots.txt & Sitemap Parser – Fetch and display robots.txt and sitemap.xml from a domain.
 
-Scan for Open Ports: Scans ports from 1 to 1024 on the specified IP to identify open ports.
+Option 29: Email Syntax & MX Validator – Validate email syntax and perform MX record lookup.
 
-IP Geolocation Lookup: Provides geolocation information (e.g., country, region, city) of a specified IP.
+Option 30: Public Exploit Search – Search for exploits for software/CVE/products using Exploit-DB.
 
-Search for Social Media Accounts: Searches for social media accounts related to a username on major platforms like Twitter, Instagram, TikTok, and Facebook.
+Option 31: Typosquatting Domain Scanner – Generate typosquatting domain variants for a target domain.
 
-Intext/Keyword Web Search: Conducts a Google search using the specified keyword(s).
+UI and Input Handling Improvements:
+
+Input sanitization to handle special characters and spaces more effectively in user inputs.
+
+Enhanced error logging with timestamped log files and more informative feedback for failed tools or checks.
+
+Bug Fixes:
+
+Fixed duplicate opt0 label causing premature exit behavior.
+
+Improved handling of missing files (robots.txt and sitemap.xml), displaying clearer messages when files aren't found.
+
+Enhanced email validation and MX record lookup functionality.
+
+Improved handling of curl errors by checking if curl is installed.
+
+Core Features (v1.5)
+Scan for Active IPs and Wi-Fi Passwords: Scans local networks for active IPs and retrieves saved Wi-Fi passwords (with administrator permissions).
+
+Ping IP Address: Tests connectivity to a specified IP address using ping.
+
+Scan for Open Ports: Scans ports (1–1024) on a specified IP address to identify open ports.
+
+IP Geolocation Lookup: Provides geographical details (country, region, city) of a specified IP.
+
+Search for Social Media Accounts: Searches for social media accounts associated with a given username across platforms like Twitter, Instagram, TikTok, and Facebook.
+
+Intext/Keyword Web Search: Executes Google search queries based on user-provided keywords.
+
+Reverse Image Search: Searches for similar images on Google and Yandex (new in v1.5).
+
+Disposable Email Checker: Identifies disposable email addresses (new in v1.5).
+
+MAC Address Vendor Lookup: Identifies the vendor associated with a given MAC address (new in v1.5).
+
+File Hash Lookup: Checks file hashes against VirusTotal for known threats (new in v1.5).
+
+Website Screenshot Generator: Captures a screenshot of a given website (new in v1.5).
+
+robots.txt & Sitemap Parser: Retrieves and displays the contents of robots.txt and sitemap.xml from a domain (new in v1.5).
+
+Email Syntax & MX Validator: Validates email format and performs MX record lookups (new in v1.5).
+
+Public Exploit Search: Searches Exploit-DB for known exploits related to a specific product or CVE (new in v1.5).
+
+Typosquatting Domain Scanner: Generates and checks potential typosquatting domains for a target domain (new in v1.5).
 
 Known Bugs & Issues
-UI/Display Bugs: Some UI features may appear unorganized or broken due to compatibility issues with Windows command prompt and batch scripting limitations. We are working on improving the visual structure of the tool.
+UI/Display Bugs: Some UI features may appear disorganized or broken in the Windows command prompt due to batch scripting limitations. Visual structure improvements are planned for future versions.
 
-Wi-Fi Password Retrieval: The Wi-Fi password retrieval feature may not work on all systems due to different versions of Windows or system configurations. Ensure you have the required permissions (Administrator) to run this feature.
+Wi-Fi Password Retrieval: This feature may not work on all systems due to different Windows versions or configurations. Ensure that you have the necessary permissions (administrator access).
 
-Geolocation Display: The geolocation output might not always be perfectly formatted and may require some manual inspection. This will be improved in future versions.
+Geolocation Display: The geolocation results may not always be perfectly formatted, requiring occasional manual inspection.
 
-Scanning Delays: Scanning for active IPs and Wi-Fi passwords may take some time due to the nature of the network scan. We are working on optimizations to speed this up without compromising accuracy.
+Scanning Delays: Scanning for active IPs or Wi-Fi passwords can take time due to network scan size. We are optimizing these processes to speed up scans without compromising accuracy.
 
-Instructions
-How to Use:
-Clone the repository or download the files to your computer.
+Exploit Search: Exploit searches may occasionally fail to return results for certain CVEs or software versions. Future updates will improve the search functionality.
 
-Open a command prompt in the folder where the script files are stored.
+How to Use
+Download the Tool: Clone the repository or download the NREM.bat and supporting files to your computer.
 
-Run the NREM.bat file.
+Run the Script: Open a command prompt in the directory where the tool is located.
 
-Follow the on-screen prompts to use different features.
+Start the Tool: Run NREM.bat.
 
-Features Available:
+Follow Prompts: The tool will display a menu with numbered options. Choose a feature by entering the corresponding number.
+
+Available Features:
+
 Type 1 to scan for active IPs and Wi-Fi passwords.
 
 Type 2 to ping an IP address.
@@ -71,20 +117,44 @@ Type 4 for IP geolocation lookup.
 
 Type 5 to search for social media accounts.
 
-Type 6 to search intext on Google.
+Type 6 to search for keywords on Google.
 
-Requirements:
-Windows Operating System (Windows 7/10/11)
+Type 22 to search for emails on the dark web.
 
-Administrator privileges for some features (e.g., Wi-Fi password retrieval)
+Type 23 to perform reverse image search.
 
-Notes:
-This tool is designed for educational purposes only. Use responsibly and only on networks that you own or have explicit permission to scan.
+Type 24 to check for disposable email addresses.
 
-Some features may not work as expected due to limitations in batch scripting or Windows system configurations. Always report bugs to help us improve the tool.
+Type 25 to look up MAC address vendors.
+
+Type 26 to perform file hash lookups.
+
+Type 27 to generate a website screenshot.
+
+Type 28 to parse robots.txt and sitemap.xml.
+
+Type 29 to validate email syntax and MX records.
+
+Type 30 to search for exploits.
+
+Type 31 to scan for typosquatting domains.
+
+Requirements
+Windows Operating System: Compatible with Windows 7, 10, and 11.
+
+Administrator Privileges: Required for features like Wi-Fi password retrieval.
+
+External Tools: Some functionality relies on external tools such as curl, whois, exiftool, and python (for future features). Make sure these tools are installed on your system.
+
+Notes
+This tool is designed for educational purposes only. Always use it responsibly and ensure that you have explicit permission to scan networks or systems that do not belong to you.
+
+Some features may not work due to batch scripting limitations or system configurations.
+
+Report bugs and issues to help improve the tool.
 
 Contributing
-Feel free to fork the repository and submit pull requests for any improvements or fixes. If you encounter any bugs or issues, please report them by opening an issue on this repository.
+Feel free to fork this repository and submit pull requests for any improvements, fixes, or additional features. If you encounter any bugs or issues, please report them by opening an issue in this repository.
 
 Disclaimer
-This tool is intended for educational purposes only. Use it responsibly and ensure you are not violating any laws or infringing on the privacy of others. The author does not take any responsibility for any misuse of the tool. Always get explicit permission before scanning networks that do not belong to you.
+This tool is intended for educational purposes only. Use it responsibly and make sure you are not violating any laws or infringing on others' privacy. The author does not take responsibility for any misuse of the tool. Always ensure you have explicit permission before scanning networks or devices that you do not own
