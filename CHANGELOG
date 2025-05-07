@@ -1,3 +1,123 @@
+🧾 Changelog – NREM OSINT Too v1.5
+Release Name: “Feature Expansion & Stability Fixes”
+Version: 1.5
+Date: 2025-05-06
+
+✅ New Features / Enhancements
+New OSINT Options (22-31):
+
+Added 10 new features for expanded OSINT capabilities:
+
+Option 22: Dark Web Email Search (Ahmia) - Search for emails on the dark web.
+
+Option 23: Reverse Image Search - Upload or paste image URLs for reverse search via Google and Yandex.
+
+Option 24: Disposable Email Checker - Identifies disposable email addresses.
+
+Option 25: MAC Address Vendor Lookup - Lookup vendor information for a given MAC address.
+
+Option 26: File Hash Lookup (VirusTotal) - Hash a file and check it against VirusTotal for known threats.
+
+Option 27: Website Screenshot - Generate a screenshot of a website.
+
+Option 28: robots.txt & Sitemap Parser - Fetch and display robots.txt and sitemap.xml from a domain.
+
+Option 29: Email Syntax & MX Validator - Validate email syntax and perform MX record lookup.
+
+Option 30: Public Exploit Search - Search for exploits for software/CVE/products using Exploit-DB.
+
+Option 31: Typosquatting Domain Scanner - Generate typosquatting domain variants for a target domain.
+
+Input Handling Improvements:
+
+User Input Sanitization: All user inputs, such as IPs, domain names, and file paths, now wrapped in quotes to handle spaces and special characters more effectively.
+
+Improved Email and Domain Handling: More robust validation for email formats and MX record lookups (for Option 29).
+
+Logging and Output Improvements:
+
+Log File Creation: Log files are now created with timestamps (logs\log_filename_YYYYMMDD_HHMM.txt), ensuring unique and easily traceable logs.
+
+More Informative Output: Added notifications for failed tool checks (e.g., whois, exiftool) so users know when these tools are missing.
+
+🐛 Bug Fixes
+Duplicate opt0 Label:
+
+Removed a second :opt0 label which was causing the script to incorrectly trigger the exit sequence when a non-existent option was entered.
+
+Improper Handling of Non-Existent Files (robots.txt & sitemap.xml):
+
+The script previously attempted to display robots.txt and sitemap.xml files even when they didn’t exist. Now, th script only tries to display the content of these files if they are found.
+
+Incorrect User Input Handling (Spaces, Special Characters):
+
+Fixed issues where user input containing spaces or special characters (like &, ?, or @) would break commands. Added proper input sanitization and quoted variables to handle these characters safely.
+
+Improved Email Lookup for MX Records:
+
+In previous versions, MX record lookups failed silently for invalid email domains or non-existent MX records. Now, the script alerts the user if no MX record is found or if the domain is invalid.
+
+Curl Error Handling:
+
+Added a missing check for curl before running it in cases where it's not installed, preventing the script from crashing or giving misleading results.
+
+⚠️ Known Bugs & Issues (For Future Fixes in v1.6)
+shodan.io and pastebin.com Direct Search:
+
+These web searches are redirected to the browser (start ""), but there are occasional issues with the command not opening the browser properly if the script runs in restricted environments (e.g., in certain versions of Windows or with restricted user permissions).
+
+Fix for v1.6: We could consider adding more robust URL validation or using APIs (if available) to handle these queries directly within the tool.
+
+Option 30 (Public Exploit Search):
+
+Searching on Exploit-DB might fail to return results correctly for certain types of CVEs or software names.
+
+Fix for v1.6: This will be improved by validating the CVE ID or using an API to retrieve more accurate results.
+
+Email Syntax & MX Validator in Option 29:
+
+MX records for certain domains (especially non-standard ones) may not always return correct results, and the tool doesn't provide much context if the domain is non-existent or invalid.
+
+Fix for v1.6: Improve error messaging and enhance MX record lookup handling.
+
+No Feedback on Success or Failure in Some Options:
+
+Certain options (e.g., IP range scanner, subdomain finder) do not give users a success/failure notification. They just silently complete.
+
+Fix for v1.6: Add more user-friendly feedback for tasks like IP range scanning or subdomain discovery (whether successful or not).
+
+📝 Future Updates for v1.6 (Planned)
+Option 32 - New Feature: API Integration for common OSINT sources, allowing the tool to fetch data directly rather than using browser redirects (such as for Shodan, Pastebin, and Exploit-DB).
+
+Improved UI:
+
+Consider adding more structured output formatting for logs and results.
+
+Adding colors and other UI elements to make the command-line output more engaging and user-friendly.
+
+Option 33 - Proxy Support:
+
+For users who need to mask their IP, add an option to use proxies (HTTP/HTTPS).
+
+Option 34 - Scheduled Scans:
+
+A feature that allows users to schedule certain scans (e.g., active IP scan, port scan) to run at specified intervals or times.
+
+🔧 Technical Improvements for v1.6
+Modularization: Further separate core OSINT functions into modules (e.g., IP geolocation, WHOIS lookup, etc.) for better code maintenance and easier debugging.
+
+Error Handling & Debug Mode:
+
+Improve logging with more detailed error messages and a “debug” mode to troubleshoot issues.
+
+Cross-Platform Support:
+
+Consider adding support for Linux/macOS to make NREM more cross-platform compatible.
+
+
+
+
+
 📝 NREM OSINT Tool – Version 1.4 Changelog
 Release Date: 2025-05-05
 Author: Linux Services
