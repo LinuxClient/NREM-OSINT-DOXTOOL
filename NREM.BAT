@@ -5,7 +5,7 @@ setlocal EnableDelayedExpansion
 cd /d "%~dp0"
 color 03
 mode con: cols=100 lines=30
-title NREM PROJECT - OSINT Tool v1.4
+title NREM PROJECT - OSINT Tool v1.5.1
 
 :: Create required directories
 if not exist logs mkdir logs
